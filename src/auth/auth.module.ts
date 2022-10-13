@@ -3,24 +3,14 @@ import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import * as https from 'https';
-import { PassportModule } from '@nestjs/passport';
-import { LdapStrategy } from './strategy/ldap.strategy';
 
 @Module({
-  imports: [
-    HttpModule.register({
-      httpsAgent: new https.Agent({  
-        rejectUnauthorized: false
-      }),
-    }),
-    PassportModule.register({ 
-      defaultStrategy: 'ldap' 
-    }),
-  ],
+  imports: [HttpModule.register({
+    httpsAgent: new https.Agent({  
+      rejectUnauthorized: false
+    })
+  })],
   controllers: [AuthController],
-  providers: [AuthService, LdapStrategy],
-  exports: [
-		PassportModule.register({ defaultStrategy: 'ldap' }),
-	],
+  providers: [AuthService]
 })
 export class AuthModule {}
