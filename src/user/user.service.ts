@@ -1,20 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { HttpException, Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { TestSchema } from './schema';
+import { catchError, map, throwError } from 'rxjs';
 
 @Injectable()
 export class UserService {
+    constructor(private readonly httpService: HttpService) {}
+
     // TO-DO: implement getUserProfile to return an object of UserSchema
-    async getUserProfile(req: Request): Promise<TestSchema> {
-        return {
-            key: "test",
-            name: "test",
-            title: "test",
-            status: "test",
-            quantity: 0,
-            type: "test",
-            position: "test",
-            borrowed: "test",
-        }
+    async getUserProfile(req: Request) {
+        console.log(req.cookies);
+        
+        return this.httpService.get('https://jira.hpcc.vn/rest/insight/1.0/object/HPCCINFRA-21', {
+            withCredentials: true,
+            headers: {
+                Cookie: `JSESSIONID=${req.cookies['JSESSIONID']}; atlassian.xsrf.token=${req.cookies['atlassian.xsrf.token']}`
+            }
+        })
+            .pipe(
+                catchError(err => throwError(() => new HttpException('cannot retrieve object', 400))),
+                map(response => response.data)
+            )
     }
 }
