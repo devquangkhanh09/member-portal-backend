@@ -1,12 +1,31 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, Req } from '@nestjs/common';
+import { UnauthorizedException } from '@nestjs/common';
 import { Response } from 'express';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { AuthDto } from './dto';
+import {createClient} from 'ldapjs';
 
 @Injectable()
 export class AuthService {
     constructor(private readonly httpService: HttpService) {}
+
+    async authenticateLDAP(@Req() req, ans: number){
+        const client = createClient({
+            url: 'ldap://10.1.1.1:389'
+        });
+        const uid = req.body.username;
+        const bindName = 'uid=' + uid + ',cn=users,cn=accounts,dc=supernodexp,dc=hpc';
+        const password = req.body.password;
+        client.bind(bindName, password, (err) => {
+            if (err){
+                ans = 1;
+            }
+            else {
+                return req.user;
+            }
+        })
+    }
 
     parseCookie(str: string) {
         const props = str.split(';').map(prop => prop.trim());
@@ -48,3 +67,5 @@ export class AuthService {
             );
     }
 }
+
+
