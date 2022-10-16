@@ -9,10 +9,7 @@ export class UserService {
 
     // TO-DO: implement getUserProfile to return an object of UserSchema
     async getUserProfile(req: Request) {
-        console.log(req.cookies);
-        
         return this.httpService.get('https://jira.hpcc.vn/rest/insight/1.0/object/HPCCINFRA-21', {
-            withCredentials: true,
             headers: {
                 Cookie: `JSESSIONID=${req.cookies['JSESSIONID']}; atlassian.xsrf.token=${req.cookies['atlassian.xsrf.token']}`
             }
