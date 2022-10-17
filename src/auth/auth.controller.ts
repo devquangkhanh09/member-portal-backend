@@ -4,24 +4,23 @@ import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 import { LdapGuard } from './guard/ldap.guard';
 import * as passport from 'passport';
-
+import { LdapStrategy } from './strategy/ldap.strategy';
+import { LocalStrategy } from './strategy/local.strategy';
+import { AuthGuard } from '@nestjs/passport';
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {};
 
     // TO-DO: use ldap guard, keep username and password (not necessarily AuthDto) to pass to signin
-    // @UseGuards(LdapGuard)  
+    // @UseGuards(LdapGuard)
 	// @Post('signin')
     // async signin(@Req() req, @Body() authDto: AuthDto, @Res({passthrough: true}) res: Response) {
     //     passport.authenticate('ldap', { session: false });
-    //     return this.authService.signin(authDto, res);
+    //     return req.user;
     // }   
-
+    @UseGuards(AuthGuard('local'))
     @Post('signin')
     async signin(@Req() req, @Body() authDto: AuthDto, @Res({passthrough: true}) res: Response) {
-        let ans: number = 0;
-        this.authService.authenticateLDAP(req, ans);
-        if (ans == 1) throw UnauthorizedException;
         return this.authService.signin(authDto, res);
     }
 }

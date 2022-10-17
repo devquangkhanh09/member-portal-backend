@@ -10,21 +10,27 @@ import {createClient} from 'ldapjs';
 export class AuthService {
     constructor(private readonly httpService: HttpService) {}
 
-    async authenticateLDAP(@Req() req, ans: number){
+    async authenticateLDAP(uid:string, password:string , callback: any){
+        let ans: any;
         const client = createClient({
             url: 'ldap://10.1.1.1:389'
         });
-        const uid = req.body.username;
-        const bindName = 'uid=' + uid + ',cn=users,cn=accounts,dc=supernodexp,dc=hpc';
-        const password = req.body.password;
-        client.bind(bindName, password, (err) => {
-            if (err){
-                ans = 1;
-            }
-            else {
-                return req.user;
-            }
+        const bindName = `uid=${uid},cn=users,cn=accounts,dc=supernodexp,dc=hpc`;
+        client.bind(bindName, password, (err, res) => {
+            callback(err,res);
+            //search 
+            const opts = {
+                filter: `uid=${uid}`,
+                attributes: ['uid', 'mail']
+              };
+            // client.search('cn=accounts', opts, (err, res) => {
+            //     res.on('searchEntry', (entry) => {
+            //         console.log('entry: ' + JSON.stringify(entry.object));
+            //     });
+            // });
+              
         })
+        return uid;
     }
 
     parseCookie(str: string) {

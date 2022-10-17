@@ -1,15 +1,15 @@
 import * as Strategy from 'passport-ldapauth';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, Req } from '@nestjs/common';
 import { Request } from 'express';
 
+let username: string;
+let password: string
 
 @Injectable()
 export class LdapStrategy extends PassportStrategy(Strategy, 'ldap') {
-	constructor(
+	constructor( 
 	) {
-		let username: string = 'user';
-		let password: string = 'pass';
 		super({ 
 			passReqToCallback: true,
 			server: { 
