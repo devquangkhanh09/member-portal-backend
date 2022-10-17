@@ -4,31 +4,19 @@ import { UnauthorizedException } from '@nestjs/common';
 import { Response } from 'express';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { AuthDto } from './dto';
-import {createClient} from 'ldapjs';
+import {createClient, SearchEntry, SearchRequest} from 'ldapjs';
 
 @Injectable()
 export class AuthService {
     constructor(private readonly httpService: HttpService) {}
 
     async authenticateLDAP(uid:string, password:string , callback: any){
-        let ans: any;
         const client = createClient({
             url: 'ldap://10.1.1.1:389'
         });
         const bindName = `uid=${uid},cn=users,cn=accounts,dc=supernodexp,dc=hpc`;
         client.bind(bindName, password, (err, res) => {
-            callback(err,res);
-            //search 
-            const opts = {
-                filter: `uid=${uid}`,
-                attributes: ['uid', 'mail']
-              };
-            // client.search('cn=accounts', opts, (err, res) => {
-            //     res.on('searchEntry', (entry) => {
-            //         console.log('entry: ' + JSON.stringify(entry.object));
-            //     });
-            // });
-              
+            callback(err, res);
         })
         return uid;
     }
