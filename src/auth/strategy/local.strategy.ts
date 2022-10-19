@@ -1,6 +1,6 @@
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 
 @Injectable()
@@ -9,18 +9,6 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
         super();
     }
 
-<<<<<<< HEAD
-    // TO-DO: fix return
-    async validate(username: string, password: string): Promise<any> {
-        const user = await this.authService.authenticateLDAP(username, password, (err, res) => {
-            if (err) {
-                // TO-DO: handle exception
-                console.log('ERROR');
-            }
-        });
-        return user;
-    }
-=======
   async validate(username: string, password: string): Promise<any> {
     try {
       const user = await this.authService.authenticateLDAP(username, password)
@@ -29,5 +17,4 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
       throw new UnauthorizedException();
     }
   }
->>>>>>> fb0b58e (fix bug ldap unauthorized)
 }

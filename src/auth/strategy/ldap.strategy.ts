@@ -20,7 +20,7 @@ export class LdapStrategy extends PassportStrategy(Strategy, 'ldap') {
 				searchAttributes: ['displayName', 'uid', 'mail'],
 			},
 		}, async (req: Request, user: any, done) => {
-			req.user = user;
+			//req.user = user;
 			return done(null, user);
 		});
 	}
