@@ -1,24 +1,22 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpException, Injectable, Req } from '@nestjs/common';
-import { UnauthorizedException } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { Response } from 'express';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { AuthDto } from './dto';
-import {createClient, SearchEntry, SearchRequest} from 'ldapjs';
+import { createClient } from 'ldapjs';
 
 @Injectable()
 export class AuthService {
     constructor(private readonly httpService: HttpService) {}
 
-    async authenticateLDAP(uid:string, password:string , callback: any){
+    // TO-DO: fix return
+    async authenticateLDAP(username: string, password: string, callback) {
         const client = createClient({
             url: 'ldap://10.1.1.1:389'
         });
-        const bindName = `uid=${uid},cn=users,cn=accounts,dc=supernodexp,dc=hpc`;
-        client.bind(bindName, password, (err, res) => {
-            callback(err, res);
-        })
-        return uid;
+        const bindName = `uid=${username},cn=users,cn=accounts,dc=supernodexp,dc=hpc`;
+        client.bind(bindName, password, callback);
+        return username;
     }
 
     parseCookie(str: string) {
@@ -38,15 +36,9 @@ export class AuthService {
             password: authDto.password
         };
 
-        const config = {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-
-        return this.httpService.post('https://jira.hpcc.vn/rest/auth/1/session', data, config)
+        return this.httpService.post('https://jira.hpcc.vn/rest/auth/1/session', data)
             .pipe(
-                catchError(err => throwError(() => new HttpException('cannot authenticate user', 401))),
+                catchError(err => throwError(() => new HttpException('Jira: cannot authenticate user', 401))),
                 tap(response => {
                     const cookies = response.headers['set-cookie'];
                     cookies.forEach(cookie => {
