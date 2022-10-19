@@ -9,6 +9,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
         super();
     }
 
+<<<<<<< HEAD
     // TO-DO: fix return
     async validate(username: string, password: string): Promise<any> {
         const user = await this.authService.authenticateLDAP(username, password, (err, res) => {
@@ -19,4 +20,14 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
         });
         return user;
     }
+=======
+  async validate(username: string, password: string): Promise<any> {
+    try {
+      const user = await this.authService.authenticateLDAP(username, password)
+      return user;
+    } catch (err) {
+      throw new UnauthorizedException();
+    }
+  }
+>>>>>>> fb0b58e (fix bug ldap unauthorized)
 }

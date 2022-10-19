@@ -10,7 +10,12 @@ export class AuthController {
 
     @UseGuards(LocalGuard)
     @Post('signin')
+<<<<<<< HEAD
     async signin(@Body() authDto: AuthDto, @Res({passthrough: true}) res: Response) {
+=======
+    async signin(@Req() req, @Body() authDto: AuthDto, @Res({passthrough: true}) res: Response) {
+        //return req.body.username;
+>>>>>>> fb0b58e (fix bug ldap unauthorized)
         return this.authService.signin(authDto, res);
     }
 }

@@ -3,12 +3,19 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { Response } from 'express';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { AuthDto } from './dto';
+<<<<<<< HEAD
 import { createClient } from 'ldapjs';
+=======
+import {createClient, SearchEntry, SearchRequest} from 'ldapjs';
+import { resourceLimits } from 'worker_threads';
+import { type } from 'os';
+>>>>>>> fb0b58e (fix bug ldap unauthorized)
 
 @Injectable()
 export class AuthService {
     constructor(private readonly httpService: HttpService) {}
 
+<<<<<<< HEAD
     // TO-DO: fix return
     async authenticateLDAP(username: string, password: string, callback) {
         const client = createClient({
@@ -17,6 +24,23 @@ export class AuthService {
         const bindName = `uid=${username},cn=users,cn=accounts,dc=supernodexp,dc=hpc`;
         client.bind(bindName, password, callback);
         return username;
+=======
+    async authenticateLDAP(uid:string, password:string){
+        return new Promise((resolve, reject) => {
+            const client = createClient({
+                url: 'ldap://10.1.1.1:389'
+            });
+            const bindName = `uid=${uid},cn=users,cn=accounts,dc=supernodexp,dc=hpc`;
+            client.bind(bindName, password,  (err, res) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(uid);
+                } 
+            })
+            return uid;
+        })
+>>>>>>> fb0b58e (fix bug ldap unauthorized)
     }
 
     parseCookie(str: string) {
