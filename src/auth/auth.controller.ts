@@ -10,8 +10,7 @@ export class AuthController {
 
     @UseGuards(LocalGuard)
     @Post('signin')
-    async signin(@Req() req, @Body() authDto: AuthDto, @Res({passthrough: true}) res: Response) {
-        //return req.body.username;
+    async signin(@Body() authDto: AuthDto, @Res({passthrough: true}) res: Response) {
         return this.authService.signin(authDto, res);
     }
 }

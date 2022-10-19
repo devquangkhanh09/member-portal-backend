@@ -3,15 +3,13 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { Response } from 'express';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { AuthDto } from './dto';
-import {createClient, SearchEntry, SearchRequest} from 'ldapjs';
-import { resourceLimits } from 'worker_threads';
-import { type } from 'os';
+import {createClient} from 'ldapjs';
 
 @Injectable()
 export class AuthService {
     constructor(private readonly httpService: HttpService) {}
 
-    async authenticateLDAP(uid:string, password:string){
+    async authenticateLDAP(uid: string, password: string) {
         return new Promise((resolve, reject) => {
             const client = createClient({
                 url: 'ldap://10.1.1.1:389'
@@ -23,8 +21,7 @@ export class AuthService {
                 } else {
                     resolve(uid);
                 } 
-            })
-            return uid;
+            });
         })
     }
 

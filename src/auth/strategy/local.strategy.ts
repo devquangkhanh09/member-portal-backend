@@ -9,12 +9,12 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
         super();
     }
 
-  async validate(username: string, password: string): Promise<any> {
-    try {
-      const user = await this.authService.authenticateLDAP(username, password)
-      return user;
-    } catch (err) {
-      throw new UnauthorizedException();
+    async validate(username: string, password: string): Promise<any> {
+        try {
+            const user = await this.authService.authenticateLDAP(username, password);
+            return user;
+        } catch (err) {
+            throw new UnauthorizedException("LDAP: cannot authenticate user");
+        }
     }
-  }
 }
