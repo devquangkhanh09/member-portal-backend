@@ -11,20 +11,12 @@ export class UserService {
 
     // TO-DO: implement getUserProfile to return an object of UserSchema
     async getIDByName(name: string) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            auth: {
-                username: "thinhlqh",
-                password: "strongestngua9999"
-            }
-        };
-        return await this.httpService.get('https://jira.hpcc.vn/rest/insight/1.0/iql/objects',config/* {
+
+        return await this.httpService.get('https://jira.hpcc.vn/rest/insight/1.0/iql/objects',{
             headers: {
                 Cookie: `JSESSIONID=${this.cookies['JSESSIONID']}; atlassian.xsrf.token=${this.cookies['atlassian.xsrf.token']}`
             }
-        }*/)
+        })
             .pipe(
                 catchError(err => throwError(() => new HttpException('cannot retrieve object', 400))),
                 map(response => response.data['objectEntries']),
@@ -35,20 +27,11 @@ export class UserService {
     }
 
     async getInfoByID(ID) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            auth: {
-                username: "thinhlqh",
-                password: "strongestngua9999"
-            }
-        };
-        var tmp = await this.httpService.get(`https://jira.hpcc.vn/rest/insight/1.0/object/${ID}/attributes`,config/* {
+        var tmp = await this.httpService.get(`https://jira.hpcc.vn/rest/insight/1.0/object/${ID}/attributes`, {
             headers: {
                 Cookie: `JSESSIONID=${this.cookies['JSESSIONID']}; atlassian.xsrf.token=${this.cookies['atlassian.xsrf.token']}`
             }
-        }*/)
+        })
             .pipe(
                 catchError(err => throwError(() => new HttpException('cannot retrieve object', 400))),
                 map(response => response.data),
