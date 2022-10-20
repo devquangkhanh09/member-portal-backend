@@ -5,18 +5,74 @@ import { catchError, map, throwError } from 'rxjs';
 
 @Injectable()
 export class UserService {
+    private cookies;
+    private book;
     constructor(private readonly httpService: HttpService) {}
 
     // TO-DO: implement getUserProfile to return an object of UserSchema
-    async getUserProfile(req: Request) {
-        return this.httpService.get('https://jira.hpcc.vn/rest/insight/1.0/object/HPCCINFRA-21', {
+    async getIDByName(name: string) {
+        const config = {
             headers: {
-                Cookie: `JSESSIONID=${req.cookies['JSESSIONID']}; atlassian.xsrf.token=${req.cookies['atlassian.xsrf.token']}`
+                'Content-Type': 'application/json'
+            },
+            auth: {
+                username: "thinhlqh",
+                password: "strongestngua9999"
             }
-        })
+        };
+        return await this.httpService.get('https://jira.hpcc.vn/rest/insight/1.0/iql/objects',config/* {
+            headers: {
+                Cookie: `JSESSIONID=${this.cookies['JSESSIONID']}; atlassian.xsrf.token=${this.cookies['atlassian.xsrf.token']}`
+            }
+        }*/)
             .pipe(
                 catchError(err => throwError(() => new HttpException('cannot retrieve object', 400))),
-                map(response => response.data)
+                map(response => response.data['objectEntries']),
+                map(response => response.filter(res => res['objectType']['name'] === "HPC LIBRARY")),
+                map(response => response.filter(res => res['label'] === name)),
+                map(response => response[0]['id'])
             )
+    }
+
+    async getInfoByID(ID) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            auth: {
+                username: "thinhlqh",
+                password: "strongestngua9999"
+            }
+        };
+        var tmp = await this.httpService.get(`https://jira.hpcc.vn/rest/insight/1.0/object/${ID}/attributes`,config/* {
+            headers: {
+                Cookie: `JSESSIONID=${this.cookies['JSESSIONID']}; atlassian.xsrf.token=${this.cookies['atlassian.xsrf.token']}`
+            }
+        }*/)
+            .pipe(
+                catchError(err => throwError(() => new HttpException('cannot retrieve object', 400))),
+                map(response => response.data),
+                map(response => {
+                    var result = {};
+                    response.forEach(element => {
+                    result[element['objectTypeAttribute']['name']] = element['objectAttributeValues'][0]['value'];
+                })
+                return result;
+            })
+            )
+        
+        tmp.subscribe(val => {
+            this.book = val;
+            console.log(this.book);
+        })
+    }
+
+    async getUserProfile(req: Request) {
+        /*if (req.cookies == undefined){
+            return new HttpException('cannot retrieve object', 400);
+        }*/
+        this.cookies = req.cookies;
+        var ID = this.getIDByName(req.body.username);
+        (await ID).subscribe(val => this.getInfoByID(val));
     }
 }
