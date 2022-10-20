@@ -23,7 +23,7 @@ export class UserService {
                 map(response => response.filter(res => res['objectType']['name'] === "HPC LIBRARY")),
                 map(response => response.filter(res => res['label'] === name)),
                 map(response => response[0]['id'])
-            )
+            );
     }
 
     async getInfoByID(ID) {
