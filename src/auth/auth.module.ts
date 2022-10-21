@@ -6,6 +6,7 @@ import * as https from 'https';
 import { PassportModule } from '@nestjs/passport';
 import { LdapStrategy } from './strategy/ldap.strategy';
 import { LocalStrategy } from './strategy/local.strategy';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { LocalStrategy } from './strategy/local.strategy';
     PassportModule.register({ 
       defaultStrategy: 'ldap',
     }),
+    JwtModule.register({})
   ],
   controllers: [AuthController],
   providers: [AuthService, LdapStrategy, LocalStrategy],
