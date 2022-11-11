@@ -1,17 +1,11 @@
-import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
+import { JiraObjectModule } from 'src/jira-object/jira-object.module';
+import { JiraObjectService } from 'src/jira-object/jira-object.service';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import * as https from 'https';
 
 @Module({
-  imports: [
-    HttpModule.register({
-      httpsAgent: new https.Agent({  
-        rejectUnauthorized: false
-      })
-    }),
-  ],
+  imports: [JiraObjectModule],
   controllers: [UserController],
   providers: [UserService]
 })

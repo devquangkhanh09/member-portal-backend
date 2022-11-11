@@ -2,43 +2,14 @@ import { HttpService } from '@nestjs/axios';
 import { HttpException, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { catchError, map, tap, throwError } from 'rxjs';
+import { JiraObjectService } from 'src/jira-object/jira-object.service';
 
 @Injectable()
 export class UserService {
-    constructor(private readonly httpService: HttpService) {}
+    constructor(private readonly jiraObjectService: JiraObjectService) {}
 
     // TO-DO: combine with jwt strategy (replace username in req.query)
     async getUserProfile(req: Request) {    
-        return this.httpService.get('https://jira.hpcc.vn/rest/insight/1.0/iql/objects', {
-            headers: {
-                Cookie: `JSESSIONID=${req.cookies['JSESSIONID']}; atlassian.xsrf.token=${req.cookies['atlassian.xsrf.token']}`
-            },
-            params: {
-                iql: `label=${req.query.username}`
-            }
-        })
-            .pipe(
-                catchError(err => throwError(() => new HttpException('Jira: cannot retrieve object', 400))),
-                tap(response => {
-                    if (response.data.objectEntries.length === 0) {
-                        throw new HttpException('Jira: object not found', 404);
-                    }
-                }),
-                map(response => response.data),
-                map(data => {
-                    const entry = data.objectEntries[0];
-                    const attributes = data.objectTypeAttributes;
-                    
-                    const res = {};
-                    attributes.forEach((attribute, idx) => {
-                        res[attribute['name']] = entry['attributes'][idx]['objectAttributeValues'][0]['value'];
-                    });
-                    
-                    return {
-                        avatar: entry['avatar'],
-                        ...res
-                    };
-                })
-            )
+        return this.jiraObjectService.getUserProfile(req);
     }
 }
