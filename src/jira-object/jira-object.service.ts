@@ -7,13 +7,13 @@ import { catchError, map, tap, throwError } from 'rxjs';
 export class JiraObjectService {
     constructor(private readonly httpService: HttpService) {}
 
-    async getUserProfile(req: Request) {    
+    async getUserProfile(req: Request) {
         return this.httpService.get('https://jira.hpcc.vn/rest/insight/1.0/iql/objects', {
             headers: {
                 Cookie: `JSESSIONID=${req.cookies['JSESSIONID']}; atlassian.xsrf.token=${req.cookies['atlassian.xsrf.token']}`
             },
             params: {
-                iql: `label=${req.query.username}`
+                iql: `label=${req.user}`
             }
         })
             .pipe(
