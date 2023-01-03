@@ -35,3 +35,44 @@ $ yarn run test:e2e
 # test coverage
 $ yarn run test:cov
 ```
+
+## API Documentation
+
+1. **POST** /auth/signin
+   
+    Request:
+
+        Body:
+           - username
+           - password
+
+    Response:
+
+2. **GET** /user/profile
+
+    Request:
+
+    Response:
+        
+        Body:
+           - avatar
+             - url16
+             - url48
+             - url72
+             - url144
+             - url288
+           - Key
+           - Name
+           - Created
+           - Updated
+           - HPCC ID
+           - Username
+           - Date of birth
+           - Role
+           - Board
+           - Student ID
+           - Address
+           - Email
+           - Phone number
+           - Major
+           - Faculty
