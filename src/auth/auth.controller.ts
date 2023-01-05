@@ -4,11 +4,12 @@ import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 import { LocalGuard } from './guard/local.guard';
 
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {};
 
-    @UseGuards(LocalGuard)
+    // NOTE: temporarily disabled due to VPN issue
+    // @UseGuards(LocalGuard)
     @Post('signin')
     async signin(@Body() authDto: AuthDto, @Res({passthrough: true}) res: Response) {
         return this.authService.signin(authDto, res);
