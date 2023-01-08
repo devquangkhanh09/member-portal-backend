@@ -43,8 +43,8 @@ $ yarn run test:cov
     Request:
 
         Body:
-           - username
-           - password
+            - username
+            - password
 
     Response:
 
@@ -60,23 +60,66 @@ $ yarn run test:cov
     Response:
         
         Body:
-           - avatar
-             - url16
-             - url48
-             - url72
-             - url144
-             - url288
-           - Key
-           - Name
-           - Created
-           - Updated
-           - Username
-           - Date of birth
-           - Role
-           - Board
-           - Student ID
-           - Address
-           - Email
-           - Phone number
-           - Major
-           - Faculty
+            - avatar
+                - url16
+                - url48
+                - url72
+                - url144
+                - url288
+            - Status  
+            - Name
+            - HPCCID
+            - Username
+            - DateOfBirth
+            - Role
+            - Board
+            - StudentID
+            - Address
+            - Email
+            - PhoneNumber
+            - Major
+            - Faculty
+
+3. **GET** /api/user/dashboard
+
+    Request:
+
+    Response:
+        
+        Body:
+
+            - NumOfMember
+            - NumOfEB
+
+4. **GET** /api/user/member
+
+    Request:
+
+    Response:
+        
+        Body:
+            [
+                {
+                    - avatar
+                        - url16
+                        - url48
+                        - url72
+                        - url144
+                        - url288
+                    - Status
+                    - Name
+                    - HPCCID
+                    - Username
+                    - DateOfBirth
+                    - Role
+                    - Board
+                    - StudentID
+                    - Address
+                    - Email
+                    - PhoneNumber
+                    - Major
+                    - Faculty
+                },
+
+                ...
+            ]
