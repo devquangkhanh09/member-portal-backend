@@ -38,7 +38,7 @@ $ yarn run test:cov
 
 ## API Documentation
 
-1. **POST** /auth/signin
+1. **POST** /api/auth/signin
    
     Request:
 
@@ -48,7 +48,12 @@ $ yarn run test:cov
 
     Response:
 
-2. **GET** /user/profile
+        Body:
+            - token: JSON Web Token (JWT), used as Bearer Token in authorization header for subsequent requests
+            - session
+            - loginInfo
+
+2. **GET** /api/user/profile
 
     Request:
 
@@ -65,7 +70,6 @@ $ yarn run test:cov
            - Name
            - Created
            - Updated
-           - HPCC ID
            - Username
            - Date of birth
            - Role

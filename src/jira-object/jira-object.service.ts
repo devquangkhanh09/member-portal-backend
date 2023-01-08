@@ -29,14 +29,16 @@ export class JiraObjectService {
                     const attributes = data.objectTypeAttributes;
                     
                     const res = {};
-                    attributes.forEach((attribute, idx) => {
-                        res[attribute['name']] = entry['attributes'][idx]['objectAttributeValues'][0]['value'];
+                    attributes.forEach((attribute) => {
+                        const entryAttribute = entry.attributes.find(attr => attr.objectTypeAttributeId === attribute.id);
+                        if (entryAttribute) res[attribute.name] = entryAttribute.objectAttributeValues[0].value;
                     });
                     
                     return {
                         avatar: entry['avatar'],
                         ...res
                     };
+                    return data;
                 })
             )
     }
