@@ -12,4 +12,9 @@ export class UserController {
     getUserProfile(@Req() req: Request) {
         return this.userService.getUserProfile(req);
     }
+
+    @Get('dashboard')
+    getDashboardInfo(@Req() req: Request) {
+        return this.userService.getDashboardInfo(req);
+    }
 }
