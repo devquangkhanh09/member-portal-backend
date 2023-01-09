@@ -38,7 +38,6 @@ export class JiraObjectService {
                         avatar: entry['avatar'],
                         ...res
                     };
-                    return data;
                 })
             )
     }
