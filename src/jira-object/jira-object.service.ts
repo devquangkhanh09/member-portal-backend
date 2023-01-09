@@ -66,7 +66,7 @@ export class JiraObjectService {
                         if (val == "None") numOfMem++;
                     })
                     return {
-                        NumOFMember: numOfMem,
+                        NumOfMember: numOfMem,
                         NumOfEB: entry.length - numOfMem
                     }
                 })
