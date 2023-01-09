@@ -17,4 +17,9 @@ export class UserController {
     getDashboardInfo(@Req() req: Request) {
         return this.userService.getDashboardInfo(req);
     }
+
+    @Get('member')
+    getMemberInfo(@Req() req: Request) {
+        return this.userService.getMemberInfo(req);
+    }
 }

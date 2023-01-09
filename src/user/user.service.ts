@@ -13,4 +13,8 @@ export class UserService {
     async getDashboardInfo(req: Request) {
         return this.jiraObjectService.getDashboardInfo(req);
     }
+
+    async getMemberInfo(req: Request) {
+        return this.jiraObjectService.getMemberInfo(req);
+    }
 }
