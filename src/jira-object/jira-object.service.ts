@@ -47,6 +47,9 @@ export class JiraObjectService {
         return await this.httpService.get('https://jira.hpcc.vn/rest/insight/1.0/iql/objects',{
             headers: {
                 Cookie: `JSESSIONID=${req.cookies['JSESSIONID']}; atlassian.xsrf.token=${req.cookies['atlassian.xsrf.token']}`
+            },
+            params: {
+                iql: 'objectTypeId=28'
             }
         })
             .pipe(
@@ -58,16 +61,15 @@ export class JiraObjectService {
                 }),
                 map(response => response.data),
                 map(response => {
-                    var entry = response['objectEntries'].filter(res => res['objectType']['name'] === "BDC MEMBER")
                     var idBoard = response['objectTypeAttributes'].find(obj => obj.name == "Board").id
                     var numOfMem = 0;
-                    entry.forEach(mem => {
+                    response['objectEntries'].forEach(mem => {
                         var val = mem['attributes'].find(atr => atr.objectTypeAttributeId == idBoard).objectAttributeValues[0].value 
                         if (val == "None") numOfMem++;
                     })
                     return {
                         NumOfMember: numOfMem,
-                        NumOfEB: entry.length - numOfMem
+                        NumOfEB: response['objectEntries'].length - numOfMem
                     }
                 })
             )
